@@ -8,11 +8,13 @@ namespace Program
 {
     internal interface IElevator
     {
-        
+        DoorState DoorState { get; }
+
         event EventHandler<int> LevelChanged;
 
-        event EventHandler<State> StateChanged;
+        event EventHandler<ElevatorState> StateChanged;
 
+        event EventHandler<DoorState> DoorChanged;
         void LevelPressed(int level);
 
     }

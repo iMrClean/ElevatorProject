@@ -8,7 +8,19 @@ using System.Windows.Forms;
 
 namespace Program
 {
-    public enum State
+    public enum DoorState
+    {
+        /**
+         * Закрыто
+         */
+        CLOSE,
+        /**
+         * Открыто
+         */
+        OPEN
+    }
+
+    public enum ElevatorState
     {
         /**
          * Остановлен
@@ -44,29 +56,36 @@ namespace Program
          * Текущий этаж
          */
         public int CurrentLevel { get; set; }
-
         /**
-         * Текущее состояние
+         * Текущее состояние лифта
          */
-        public State State { get; set; }
-
+        public ElevatorState ElevatorState { get; set; }
+        /**
+         * Текущеее состояние дверей
+         */
+        public DoorState DoorState { get; set; }
         /**
          * Событие которое следит за изменением этажа
          */
         public event EventHandler<int> LevelChanged;
-
         /**
          *Событие которое следит за изменением открытости
          */
-        public event EventHandler<State> StateChanged;
-
+        public event EventHandler<ElevatorState> StateChanged;
+        /**
+         *Событие которое следит за изменением открытости
+         */
+        public event EventHandler<DoorState> DoorChanged;
         /**
          * Инициализация лифта с количеством этажей в нем
          */
         public Elevator(int minLevel, int maxLevel)
         {
+            this.CurrentLevel = 1;
             this.MinLevel = minLevel;
             this.MaxLevel = maxLevel;
+            this.ElevatorState = ElevatorState.WAIT;
+            this.DoorState = DoorState.CLOSE;
         }
 
         /**
@@ -89,8 +108,11 @@ namespace Program
          */
         private void MoveUp(int level)
         {
-            State = State.UP;
-            StateChanged?.Invoke(this, State);
+            ElevatorState = ElevatorState.UP;
+            StateChanged?.Invoke(this, ElevatorState);
+            
+            DoorState = DoorState.CLOSE;
+            DoorChanged?.Invoke(this, DoorState);
 
             while (level <= MaxLevel)
             {
@@ -103,7 +125,7 @@ namespace Program
                 CurrentLevel++;
                 LevelChanged?.Invoke(this, CurrentLevel);
 
-                Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, State);
+                Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
                 Thread.Sleep(FUCKING_SLEEP);
             }
         }
@@ -113,8 +135,11 @@ namespace Program
         */
         private void MoveDown(int level)
         {
-            State = State.DOWN;
-            StateChanged?.Invoke(this, State);
+            ElevatorState = ElevatorState.DOWN;
+            StateChanged?.Invoke(this, ElevatorState);
+
+            DoorState = DoorState.CLOSE;
+            DoorChanged?.Invoke(this, DoorState);
 
             while (level >= MinLevel)
             {
@@ -127,7 +152,7 @@ namespace Program
                 CurrentLevel--;
                 LevelChanged?.Invoke(this, CurrentLevel);
 
-                Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, State);
+                Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
                 Thread.Sleep(FUCKING_SLEEP);
             }
         }
@@ -137,13 +162,16 @@ namespace Program
         */
         private void MoveStop(int level)
         {
-            State = State.WAIT;
-            StateChanged?.Invoke(this, State);
+            ElevatorState = ElevatorState.WAIT;
+            StateChanged?.Invoke(this, ElevatorState);
+            
+            DoorState = DoorState.OPEN;
+            DoorChanged?.Invoke(this, DoorState);
 
             CurrentLevel = level;
             LevelChanged?.Invoke(this, CurrentLevel);
 
-            Console.WriteLine("Остановились на {0} этаже {1}", level, State);
+            Console.WriteLine("Остановились на {0} этаже {1}", level, ElevatorState);
             Thread.Sleep(FUCKING_SLEEP);
         }
 
@@ -155,17 +183,17 @@ namespace Program
             Console.WriteLine("Выбран {0} этаж", level);
             CheckLevel(level);
 
-            if (CurrentLevel < level)
+            if (CurrentLevel == level)
+            {
+                MoveStop(level);
+            }
+            else if (CurrentLevel < level)
             {
                 MoveUp(level);
             }
             else if (CurrentLevel > level)
             {
                 MoveDown(level);
-            }
-            else
-            {
-                MoveStop(level);
             }
         }
     }

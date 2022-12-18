@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
@@ -30,6 +31,7 @@ namespace Program
             elevator = new Elevator(1, 20);
             elevator.LevelChanged += LevelChanged_Handler;
             elevator.StateChanged += StateChanged_Handler;
+            elevator.DoorChanged += DoorChanged_Handler; 
         }
 
         private void CallUpButton_Click(object sender, EventArgs e)
@@ -50,18 +52,57 @@ namespace Program
             Refresh();
         }
 
-        private void StateChanged_Handler(object sender, State state)
+        private void StateChanged_Handler(object sender, ElevatorState elevatorState)
         {
-            Console.WriteLine($"Состояние лифта: {state}");
-            if (state == State.WAIT)
+            Console.WriteLine($"Состояние лифта: {elevatorState} Двери {elevator.DoorState}");
+            switch (elevatorState)
             {
-                elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-3.png");
-            }
-            else
-            {
-                elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-1.png");
+                case ElevatorState.WAIT:
+                    if (elevator.DoorState == DoorState.CLOSE)
+                    {
+                        OpenDoor();
+                    }
+                    if (elevator.DoorState == DoorState.OPEN)
+                    {
+                        CloseDoor();
+                    }
+                    break;
+                case ElevatorState.UP:
+                    if (elevator.DoorState == DoorState.OPEN)
+                    {
+                        CloseDoor();
+                    }
+                    break;
+                case ElevatorState.DOWN:
+                    if (elevator.DoorState == DoorState.OPEN)
+                    {
+                        CloseDoor();
+                    }
+                    break;
+                default:
+                    break;
             }
             Refresh();
+        }
+        private void DoorChanged_Handler(object sender, DoorState doorState)
+        {
+            Console.WriteLine($"Двери лифта : {doorState}");
+        }
+
+        private void OpenDoor()
+        {
+            elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-2.png");
+            Refresh();
+            Thread.Sleep(500);
+            elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-3.png");
+        }
+
+        private void CloseDoor()
+        {
+            elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-2.png");
+            Refresh();
+            Thread.Sleep(300);
+            elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-1.png");
         }
     }
 }
