@@ -77,6 +77,10 @@ namespace Program
          */
         public event EventHandler<DoorState> DoorChanged;
         /**
+         *
+         */
+        public Dictionary<int, string> ElevatorRoute;
+        /**
          * Инициализация лифта с количеством этажей в нем
          */
         public Elevator(int minLevel, int maxLevel)
@@ -108,11 +112,8 @@ namespace Program
          */
         private void MoveUp(int level)
         {
-            ElevatorState = ElevatorState.UP;
-            StateChanged?.Invoke(this, ElevatorState);
-            
-            DoorState = DoorState.CLOSE;
-            DoorChanged?.Invoke(this, DoorState);
+            UpdateElevatorState(ElevatorState.UP);
+            UpdateDoorState(DoorState.CLOSE);
 
             while (level <= MaxLevel)
             {
@@ -121,9 +122,7 @@ namespace Program
                     MoveStop(level);
                     break;
                 }
-
-                CurrentLevel++;
-                LevelChanged?.Invoke(this, CurrentLevel);
+                UpdateLevelState(++CurrentLevel);
 
                 Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
                 Thread.Sleep(FUCKING_SLEEP);
@@ -135,11 +134,8 @@ namespace Program
         */
         private void MoveDown(int level)
         {
-            ElevatorState = ElevatorState.DOWN;
-            StateChanged?.Invoke(this, ElevatorState);
-
-            DoorState = DoorState.CLOSE;
-            DoorChanged?.Invoke(this, DoorState);
+            UpdateElevatorState(ElevatorState.DOWN);
+            UpdateDoorState(DoorState.CLOSE);
 
             while (level >= MinLevel)
             {
@@ -148,9 +144,7 @@ namespace Program
                     MoveStop(level);
                     break;
                 }
-
-                CurrentLevel--;
-                LevelChanged?.Invoke(this, CurrentLevel);
+                UpdateLevelState(--CurrentLevel);
 
                 Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
                 Thread.Sleep(FUCKING_SLEEP);
@@ -162,14 +156,10 @@ namespace Program
         */
         private void MoveStop(int level)
         {
-            ElevatorState = ElevatorState.WAIT;
-            StateChanged?.Invoke(this, ElevatorState);
-            
-            DoorState = DoorState.OPEN;
-            DoorChanged?.Invoke(this, DoorState);
+            UpdateElevatorState(ElevatorState.WAIT);
+            UpdateDoorState(DoorState.OPEN);
 
-            CurrentLevel = level;
-            LevelChanged?.Invoke(this, CurrentLevel);
+            UpdateLevelState(level);
 
             Console.WriteLine("Остановились на {0} этаже {1}", level, ElevatorState);
             Thread.Sleep(FUCKING_SLEEP);
@@ -196,6 +186,25 @@ namespace Program
                 MoveDown(level);
             }
         }
+
+        private void UpdateElevatorState(ElevatorState elevatorState)
+        {
+            ElevatorState = elevatorState;
+            StateChanged?.Invoke(this, ElevatorState);
+        }
+
+        private void UpdateDoorState(DoorState doorState)
+        {
+            DoorState = doorState;
+            DoorChanged?.Invoke(this, DoorState);
+        }
+
+        private void UpdateLevelState(int level)
+        {
+            CurrentLevel = level;
+            LevelChanged?.Invoke(this, CurrentLevel);
+        }
+
     }
 
 }
