@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{67332C73-E638-49FF-BB53-B189324F950D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Program</RootNamespace>
+    <AssemblyName>Program</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Elevator.cs" />
+    <Compile Include="IElevator.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\images\button\btn-1.png" />
+    <None Include="Resources\images\button\sdfg.png" />
+    <None Include="Resources\Icon1.ico" />
+    <Content Include="Resources\images\arrow\arrow-1.png" />
+    <Content Include="Resources\images\arrow\arrow-2.png" />
+    <Content Include="Resources\images\button\button-1.png" />
+    <Content Include="Resources\images\button\button-2.png" />
+    <Content Include="Resources\images\button\button-3.png" />
+    <Content Include="Resources\images\button\button-4.png" />
+    <Content Include="Resources\images\elevator\elevator-1.png" />
+    <Content Include="Resources\images\elevator\elevator-2.png" />
+    <Content Include="Resources\images\elevator\elevator-3.png" />
+    <Content Include="Resources\images\number\1.png" />
+    <Content Include="Resources\images\number\10.png" />
+    <Content Include="Resources\images\number\11.png" />
+    <Content Include="Resources\images\number\12.png" />
+    <Content Include="Resources\images\number\13.png" />
+    <Content Include="Resources\images\number\14.png" />
+    <Content Include="Resources\images\number\15.png" />
+    <Content Include="Resources\images\number\16.png" />
+    <Content Include="Resources\images\number\17.png" />
+    <Content Include="Resources\images\number\18.png" />
+    <Content Include="Resources\images\number\19.png" />
+    <Content Include="Resources\images\number\2.png" />
+    <Content Include="Resources\images\number\20.png" />
+    <Content Include="Resources\images\number\3.png" />
+    <Content Include="Resources\images\number\4.png" />
+    <Content Include="Resources\images\number\5.png" />
+    <Content Include="Resources\images\number\6.png" />
+    <Content Include="Resources\images\number\7.png" />
+    <Content Include="Resources\images\number\8.png" />
+    <Content Include="Resources\images\number\9.png" />
+    <Content Include="Resources\images\number\display.png" />
+    <None Include="Resources\TestImage.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
