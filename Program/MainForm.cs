@@ -44,7 +44,7 @@ namespace Program
         private void LevelChanged_Handler(object sender, int currentLevel)
         {
             Console.WriteLine($"Лифт на этаже: {currentLevel}");
-            displayPictureBox.Image = System.Drawing.Image.FromFile("C:\\Users\\Konstantin\\source\\repos\\Program\\Program\\Resources\\images\\number\\" + currentLevel + ".png");
+            displayPictureBox.Image = System.Drawing.Image.FromFile("..\\..\\Resources\\images\\number\\" + currentLevel + ".png");
             Refresh();
         }
 
@@ -53,11 +53,11 @@ namespace Program
             Console.WriteLine($"Состояние лифта: {state}");
             if (state == State.WAIT)
             {
-                elevatorPictureBox.Image = System.Drawing.Image.FromFile("C:\\Users\\Konstantin\\source\\repos\\Program\\Program\\Resources\\images\\elevator\\elevator-3.png");
+                elevatorPictureBox.Image = System.Drawing.Image.FromFile("..\\..\\Resources\\images\\elevator\\elevator-3.png");
             }
             else
             {
-                elevatorPictureBox.Image = System.Drawing.Image.FromFile("C:\\Users\\Konstantin\\source\\repos\\Program\\Program\\Resources\\images\\elevator\\elevator-1.png");
+                elevatorPictureBox.Image = System.Drawing.Image.FromFile("..\\..\\Resources\\images\\elevator\\elevator-1.png");
             }
             Refresh();
         }
