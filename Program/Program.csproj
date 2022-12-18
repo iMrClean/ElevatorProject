@@ -85,8 +85,6 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="Resources\images\button\btn-1.png" />
-    <None Include="Resources\images\button\sdfg.png" />
-    <None Include="Resources\Icon1.ico" />
     <Content Include="Resources\images\arrow\arrow-1.png" />
     <Content Include="Resources\images\arrow\arrow-2.png" />
     <Content Include="Resources\images\button\button-1.png" />
@@ -117,7 +115,6 @@
     <Content Include="Resources\images\number\8.png" />
     <Content Include="Resources\images\number\9.png" />
     <Content Include="Resources\images\number\display.png" />
-    <None Include="Resources\TestImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
