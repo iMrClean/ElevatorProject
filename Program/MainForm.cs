@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Program
 {
@@ -43,11 +44,22 @@ namespace Program
         private void LevelChanged_Handler(object sender, int currentLevel)
         {
             Console.WriteLine($"Лифт на этаже: {currentLevel}");
+            displayPictureBox.Image = System.Drawing.Image.FromFile("C:\\Users\\Konstantin\\source\\repos\\Program\\Program\\Resources\\images\\number\\" + currentLevel + ".png");
+            Refresh();
         }
 
         private void StateChanged_Handler(object sender, State state)
         {
             Console.WriteLine($"Состояние лифта: {state}");
+            if (state == State.WAIT)
+            {
+                elevatorPictureBox.Image = System.Drawing.Image.FromFile("C:\\Users\\Konstantin\\source\\repos\\Program\\Program\\Resources\\images\\elevator\\elevator-3.png");
+            }
+            else
+            {
+                elevatorPictureBox.Image = System.Drawing.Image.FromFile("C:\\Users\\Konstantin\\source\\repos\\Program\\Program\\Resources\\images\\elevator\\elevator-1.png");
+            }
+            Refresh();
         }
     }
 }

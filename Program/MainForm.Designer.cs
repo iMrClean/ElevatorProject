@@ -28,25 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.displayPictureBox = new System.Windows.Forms.PictureBox();
-            this.elevatorPictureBox = new System.Windows.Forms.PictureBox();
             this.callUpButton = new System.Windows.Forms.Button();
             this.callDownButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.callPictureBox = new System.Windows.Forms.PictureBox();
+            this.displayPictureBox = new System.Windows.Forms.PictureBox();
+            this.elevatorPictureBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.callPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.displayPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elevatorPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // callUpButton
             // 
-            this.pictureBox1.Image = global::Program.Properties.Resources.btn_1;
-            this.pictureBox1.Location = new System.Drawing.Point(580, 280);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(35, 70);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
+            this.callUpButton.BackColor = System.Drawing.Color.Transparent;
+            this.callUpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.callUpButton.Location = new System.Drawing.Point(589, 297);
+            this.callUpButton.Name = "callUpButton";
+            this.callUpButton.Size = new System.Drawing.Size(20, 30);
+            this.callUpButton.TabIndex = 3;
+            this.callUpButton.UseVisualStyleBackColor = false;
+            this.callUpButton.Click += new System.EventHandler(this.CallUpButton_Click);
+            // 
+            // callDownButton
+            // 
+            this.callDownButton.BackColor = System.Drawing.Color.Transparent;
+            this.callDownButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.callDownButton.Location = new System.Drawing.Point(589, 321);
+            this.callDownButton.Name = "callDownButton";
+            this.callDownButton.Size = new System.Drawing.Size(20, 30);
+            this.callDownButton.TabIndex = 4;
+            this.callDownButton.UseVisualStyleBackColor = false;
+            this.callDownButton.Click += new System.EventHandler(this.CallDownButton_Click);
+            // 
+            // callPictureBox
+            // 
+            this.callPictureBox.Image = global::Program.Properties.Resources.btn_1;
+            this.callPictureBox.Location = new System.Drawing.Point(580, 280);
+            this.callPictureBox.Name = "callPictureBox";
+            this.callPictureBox.Size = new System.Drawing.Size(35, 70);
+            this.callPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.callPictureBox.TabIndex = 2;
+            this.callPictureBox.TabStop = false;
             // 
             // displayPictureBox
             // 
@@ -71,28 +93,6 @@
             this.elevatorPictureBox.TabIndex = 0;
             this.elevatorPictureBox.TabStop = false;
             // 
-            // callUpButton
-            // 
-            this.callUpButton.BackColor = System.Drawing.Color.Transparent;
-            this.callUpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.callUpButton.Location = new System.Drawing.Point(589, 295);
-            this.callUpButton.Name = "callUpButton";
-            this.callUpButton.Size = new System.Drawing.Size(20, 20);
-            this.callUpButton.TabIndex = 3;
-            this.callUpButton.UseVisualStyleBackColor = false;
-            this.callUpButton.Click += new System.EventHandler(this.CallUpButton_Click);
-            // 
-            // callDownButton
-            // 
-            this.callDownButton.BackColor = System.Drawing.Color.Transparent;
-            this.callDownButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.callDownButton.Location = new System.Drawing.Point(589, 321);
-            this.callDownButton.Name = "callDownButton";
-            this.callDownButton.Size = new System.Drawing.Size(20, 20);
-            this.callDownButton.TabIndex = 4;
-            this.callDownButton.UseVisualStyleBackColor = false;
-            this.callDownButton.Click += new System.EventHandler(this.CallDownButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -101,13 +101,13 @@
             this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(this.callDownButton);
             this.Controls.Add(this.callUpButton);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.callPictureBox);
             this.Controls.Add(this.displayPictureBox);
             this.Controls.Add(this.elevatorPictureBox);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Elevator";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.callPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.displayPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.elevatorPictureBox)).EndInit();
             this.ResumeLayout(false);
@@ -118,7 +118,7 @@
 
         private System.Windows.Forms.PictureBox elevatorPictureBox;
         private System.Windows.Forms.PictureBox displayPictureBox;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox callPictureBox;
         private System.Windows.Forms.Button callUpButton;
         private System.Windows.Forms.Button callDownButton;
     }
