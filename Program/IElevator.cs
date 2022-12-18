@@ -15,6 +15,7 @@ namespace Program
         event EventHandler<ElevatorState> StateChanged;
 
         event EventHandler<DoorState> DoorChanged;
+
         void LevelPressed(int level);
 
     }

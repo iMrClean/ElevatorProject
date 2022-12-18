@@ -18,6 +18,8 @@ namespace Program
     {
         private const string PATH_TO_RESOURCES_IMAGES = "..\\..\\Resources\\images";
 
+        private static readonly int FUCKING_SLEEP = 300;
+
         private IElevator elevator;
 
         public MainForm()
@@ -93,7 +95,7 @@ namespace Program
         {
             elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-2.png");
             Refresh();
-            Thread.Sleep(500);
+            Thread.Sleep(FUCKING_SLEEP);
             elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-3.png");
         }
 
@@ -101,7 +103,7 @@ namespace Program
         {
             elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-2.png");
             Refresh();
-            Thread.Sleep(300);
+            Thread.Sleep(FUCKING_SLEEP);
             elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-1.png");
         }
     }
