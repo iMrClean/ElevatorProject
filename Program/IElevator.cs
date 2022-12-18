@@ -13,7 +13,7 @@ namespace Program
 
         event EventHandler<State> StateChanged;
 
-        Task LevelPressed(int level);
+        void LevelPressed(int level);
 
     }
 

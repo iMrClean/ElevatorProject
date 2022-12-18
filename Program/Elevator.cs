@@ -87,7 +87,7 @@ namespace Program
         /**
          * Двигаться вверх
          */
-        private async Task MoveUp(int level)
+        private void MoveUp(int level)
         {
             State = State.UP;
             StateChanged?.Invoke(this, State);
@@ -96,7 +96,7 @@ namespace Program
             {
                 if (level == CurrentLevel)
                 {
-                    await MoveStop(level);
+                    MoveStop(level);
                     break;
                 }
 
@@ -104,14 +104,14 @@ namespace Program
                 LevelChanged?.Invoke(this, CurrentLevel);
 
                 Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, State);
-                await Task.Delay(FUCKING_SLEEP);
+                Thread.Sleep(FUCKING_SLEEP);
             }
         }
 
         /**
         * Двигаться вниз
         */
-        private async Task MoveDown(int level)
+        private void MoveDown(int level)
         {
             State = State.DOWN;
             StateChanged?.Invoke(this, State);
@@ -120,7 +120,7 @@ namespace Program
             {
                 if (level == CurrentLevel)
                 {
-                    await MoveStop(level);
+                    MoveStop(level);
                     break;
                 }
 
@@ -128,43 +128,44 @@ namespace Program
                 LevelChanged?.Invoke(this, CurrentLevel);
 
                 Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, State);
-                await Task.Delay(FUCKING_SLEEP);
+                Thread.Sleep(FUCKING_SLEEP);
             }
         }
 
         /**
         * Остановили движение (добрались до нужного этажа)
         */
-        private async Task MoveStop(int level)
+        private void MoveStop(int level)
         {
             State = State.WAIT;
             StateChanged?.Invoke(this, State);
+
             CurrentLevel = level;
             LevelChanged?.Invoke(this, CurrentLevel);
 
             Console.WriteLine("Остановились на {0} этаже {1}", level, State);
-            await Task.Delay(FUCKING_SLEEP);
+            Thread.Sleep(FUCKING_SLEEP);
         }
 
         /**
          * Пользователь нажал на кнопку этажа внутри лифта
          */
-        public async Task LevelPressed(int level)
+        public void LevelPressed(int level)
         {
             Console.WriteLine("Выбран {0} этаж", level);
             CheckLevel(level);
 
             if (CurrentLevel < level)
             {
-                await MoveUp(level);
+                MoveUp(level);
             }
             else if (CurrentLevel > level)
             {
-                await MoveDown(level);
+                MoveDown(level);
             }
             else
             {
-                await MoveStop(level);
+                MoveStop(level);
             }
         }
     }

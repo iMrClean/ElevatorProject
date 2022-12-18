@@ -25,20 +25,29 @@ namespace Program
         public void InitForm()
         {
             elevator = new Elevator(1, 20);
-            elevator.StateChanged += (s, e) => Console.WriteLine($"Состояние лифта: {e}");
-            elevator.LevelChanged += (s, e) => Console.WriteLine($"Лифт на этаже: {e}");
+            elevator.LevelChanged += LevelChanged_Handler;
+            elevator.StateChanged += StateChanged_Handler;
         }
 
-        private async void CallUpButton_Click(object sender, EventArgs e)
+        private void CallUpButton_Click(object sender, EventArgs e)
         {
             int level = 10;
-            await elevator.LevelPressed(level);
+            elevator.LevelPressed(level);
         }
-        private async void CallDownButton_Click(object sender, EventArgs e)
+        private void CallDownButton_Click(object sender, EventArgs e)
         {
             int level = 1;
-            await elevator.LevelPressed(level);
+            elevator.LevelPressed(level);
         }
 
+        private void LevelChanged_Handler(object sender, int currentLevel)
+        {
+            Console.WriteLine($"Лифт на этаже: {currentLevel}");
+        }
+
+        private void StateChanged_Handler(object sender, State state)
+        {
+            Console.WriteLine($"Состояние лифта: {state}");
+        }
     }
 }
