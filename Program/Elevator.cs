@@ -192,6 +192,10 @@ namespace Program
                 await MoveDown(level);
             }
         }
+
+        /*
+         * Обновить все евенты
+         */
         private void Update(ElevatorState elevatorState, DoorState doorState, int level)
         {
             UpdateElevatorState(elevatorState);
@@ -199,18 +203,26 @@ namespace Program
             UpdateLevelState(level);
         }
 
+        /*
+         * Обновить евент лифта
+         */
         private void UpdateElevatorState(ElevatorState elevatorState)
         {
             ElevatorState = elevatorState;
             StateChanged?.Invoke(this, ElevatorState);
         }
 
+        /*
+         * Обновить евент двери
+         */
         private void UpdateDoorState(DoorState doorState)
         {
             DoorState = doorState;
             DoorChanged?.Invoke(this, DoorState);
         }
-
+        /*
+         * Обновить евент этажа
+         */
         private void UpdateLevelState(int level)
         {
             CurrentLevel = level;
