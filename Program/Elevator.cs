@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -77,11 +78,12 @@ namespace Program
          */
         public event EventHandler<DoorState> DoorChanged;
         /**
-         *
+         * Этажи на которых нужно остановиться
          */
-        public Dictionary<int, string> ElevatorRoute;
+        public List<int> stopList;
+
         /**
-         * Инициализация лифта с количеством этажей в нем
+         * Конструктор
          */
         public Elevator(int minLevel, int maxLevel)
         {
@@ -90,6 +92,7 @@ namespace Program
             this.MaxLevel = maxLevel;
             this.ElevatorState = ElevatorState.WAIT;
             this.DoorState = DoorState.CLOSE;
+            this.stopList = new List<int>();
         }
 
         /**
@@ -110,81 +113,94 @@ namespace Program
         /**
          * Двигаться вверх
          */
-        private void MoveUp(int level)
+        private async Task MoveUp(int level)
         {
             UpdateElevatorState(ElevatorState.UP);
             UpdateDoorState(DoorState.CLOSE);
 
             while (level <= MaxLevel)
             {
-                if (level == CurrentLevel)
+                if (stopList.Contains(CurrentLevel))
                 {
-                    MoveStop(level);
+                    await MoveStop(level);
+                }
+                if (stopList.Count == 0)
+                {
                     break;
                 }
                 UpdateLevelState(++CurrentLevel);
 
                 Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
-                Thread.Sleep(FUCKING_SLEEP);
+                await Task.Delay(FUCKING_SLEEP);
             }
         }
 
         /**
         * Двигаться вниз
         */
-        private void MoveDown(int level)
+        private async Task MoveDown(int level)
         {
             UpdateElevatorState(ElevatorState.DOWN);
             UpdateDoorState(DoorState.CLOSE);
 
             while (level >= MinLevel)
             {
-                if (level == CurrentLevel)
+                if (stopList.Contains(CurrentLevel))
                 {
-                    MoveStop(level);
+                    await MoveStop(level);
+                }
+                if (stopList.Count == 0)
+                {
                     break;
                 }
                 UpdateLevelState(--CurrentLevel);
 
                 Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
-                Thread.Sleep(FUCKING_SLEEP);
+                await Task.Delay(FUCKING_SLEEP);
             }
         }
 
         /**
         * Остановили движение (добрались до нужного этажа)
         */
-        private void MoveStop(int level)
+        private async Task MoveStop(int level)
         {
-            UpdateElevatorState(ElevatorState.WAIT);
-            UpdateDoorState(DoorState.OPEN);
+            Update(ElevatorState.WAIT, DoorState.OPEN, level);
 
-            UpdateLevelState(level);
+            stopList.Remove(level);
 
             Console.WriteLine("Остановились на {0} этаже {1}", level, ElevatorState);
-            Thread.Sleep(FUCKING_SLEEP);
+            await Task.Delay(FUCKING_SLEEP);
         }
 
         /**
          * Пользователь нажал на кнопку этажа внутри лифта
          */
-        public void LevelPressed(int level)
+        public async Task LevelPressed(int level)
         {
             Console.WriteLine("Выбран {0} этаж", level);
             CheckLevel(level);
+            stopList.Add(level);
+            Update(ElevatorState.WAIT, DoorState.CLOSE, level);
 
             if (CurrentLevel == level)
             {
-                MoveStop(level);
+                await MoveStop(level);
             }
             else if (CurrentLevel < level)
             {
-                MoveUp(level);
+                await MoveUp(level);
             }
             else if (CurrentLevel > level)
             {
-                MoveDown(level);
+                await MoveDown(level);
             }
+        }
+        private void Update(ElevatorState elevatorState, DoorState doorState, int level)
+        {
+            UpdateElevatorState(elevatorState);
+            UpdateDoorState(doorState);
+            UpdateLevelState(level);
         }
 
         private void UpdateElevatorState(ElevatorState elevatorState)

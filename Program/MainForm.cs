@@ -36,15 +36,15 @@ namespace Program
             elevator.DoorChanged += DoorChanged_Handler; 
         }
 
-        private void CallUpButton_Click(object sender, EventArgs e)
+        private async void CallUpButton_Click(object sender, EventArgs e)
         {
             int level = 10;
-            elevator.LevelPressed(level);
+            await elevator.LevelPressed(level);
         }
-        private void CallDownButton_Click(object sender, EventArgs e)
+        private async void CallDownButton_Click(object sender, EventArgs e)
         {
             int level = 1;
-            elevator.LevelPressed(level);
+            await elevator.LevelPressed(level);
         }
 
         private void LevelChanged_Handler(object sender, int currentLevel)
