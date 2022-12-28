@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Program.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -39,14 +40,28 @@ namespace Program
         private async void CallUpButton_Click(object sender, EventArgs e)
         {
             int level = 10;
-            await elevator.LevelPressed(level);
+            await elevator.LevelPressed(level, CallState.OUTSIDE);
         }
         private async void CallDownButton_Click(object sender, EventArgs e)
         {
             int level = 1;
-            await elevator.LevelPressed(level);
+            await elevator.LevelPressed(level, CallState.OUTSIDE);
+        }
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            int level = 5;
+            await elevator.LevelPressed(level, CallState.OUTSIDE);
+        }
+        
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
         private void LevelChanged_Handler(object sender, int currentLevel)
         {
             Console.WriteLine($"Лифт на этаже: {currentLevel}");
@@ -106,5 +121,6 @@ namespace Program
             Thread.Sleep(FUCKING_SLEEP);
             elevatorPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\elevator\\elevator-1.png");
         }
+
     }
 }

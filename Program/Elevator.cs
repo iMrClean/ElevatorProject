@@ -1,40 +1,20 @@
-﻿using System;
+﻿using Program.Enum;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Program
 {
-    public enum DoorState
-    {
-        /**
-         * Закрыто
-         */
-        CLOSE,
-        /**
-         * Открыто
-         */
-        OPEN
-    }
-
-    public enum ElevatorState
-    {
-        /**
-         * Остановлен
-         */
-        WAIT,
-        /**
-         * Едем вверх
-         */
-        UP,
-        /**
-         * Едем вниз
-         */
-        DOWN
-    }
 
     internal class Elevator : IElevator
     {
+        /**
+         * 
+         */
+        private static readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+
         /**
          * Время за которое лифт перемещается на этаж
          */
@@ -48,7 +28,6 @@ namespace Program
          * Максимальный этаж
          */
         private readonly int MaxLevel;
-
         /**
          * Текущий этаж
          */
@@ -109,16 +88,18 @@ namespace Program
         /**
          * Двигаться вверх
          */
-        private async Task MoveUp(int level)
+        private void MoveUp(int level)
         {
+            Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
             UpdateElevatorState(ElevatorState.UP);
             UpdateDoorState(DoorState.CLOSE);
 
             while (level <= MaxLevel)
             {
+                stopList.ForEach(i => Console.WriteLine("Бутон Армагеддон " + i));
                 if (stopList.Contains(CurrentLevel))
                 {
-                    await MoveStop(level);
+                    MoveStop(level);
                 }
                 if (stopList.Count == 0)
                 {
@@ -126,24 +107,25 @@ namespace Program
                 }
                 UpdateLevelState(++CurrentLevel);
 
-                Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
-                await Task.Delay(FUCKING_SLEEP);
+                Thread.Sleep(FUCKING_SLEEP);
             }
         }
 
         /**
         * Двигаться вниз
         */
-        private async Task MoveDown(int level)
+        private void MoveDown(int level)
         {
+            Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
             UpdateElevatorState(ElevatorState.DOWN);
             UpdateDoorState(DoorState.CLOSE);
 
             while (level >= MinLevel)
             {
+                stopList.ForEach(i => Console.WriteLine("Бутон Армагеддон " + i));
                 if (stopList.Contains(CurrentLevel))
                 {
-                    await MoveStop(level);
+                    MoveStop(level);
                 }
                 if (stopList.Count == 0)
                 {
@@ -151,46 +133,49 @@ namespace Program
                 }
                 UpdateLevelState(--CurrentLevel);
 
-                Console.WriteLine("Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
-                await Task.Delay(FUCKING_SLEEP);
+                Thread.Sleep(FUCKING_SLEEP);
             }
         }
 
         /**
         * Остановили движение (добрались до нужного этажа)
         */
-        private async Task MoveStop(int level)
+        private void MoveStop(int level)
         {
+            Console.WriteLine("Остановились на {0} этаже {1}", level, ElevatorState);
             Update(ElevatorState.WAIT, DoorState.OPEN, level);
 
             stopList.Remove(level);
-
-            Console.WriteLine("Остановились на {0} этаже {1}", level, ElevatorState);
-            await Task.Delay(FUCKING_SLEEP);
+            Thread.Sleep(FUCKING_SLEEP);
         }
 
         /**
          * Пользователь нажал на кнопку этажа внутри лифта
          */
-        public async Task LevelPressed(int level)
+        public async Task LevelPressed(int level, CallState callState)
         {
-            Console.WriteLine("Выбран {0} этаж", level);
+            Console.WriteLine("Выбран {0} этаж, вызов {1}", level, callState);
             CheckLevel(level);
-            stopList.Add(level);
-            Update(ElevatorState.WAIT, DoorState.CLOSE, level);
+            AddToStopList(level);
+            Update(ElevatorState.WAIT, DoorState.CLOSE, CurrentLevel);
 
             if (CurrentLevel == level)
             {
-                await MoveStop(level);
+                MoveStop(level);
             }
             else if (CurrentLevel < level)
             {
-                await MoveUp(level);
+                MoveUp(level);
             }
             else if (CurrentLevel > level)
             {
-                await MoveDown(level);
+                MoveDown(level);
             }
+        }
+        public void AddToStopList(int level)
+        {
+            Console.WriteLine("Start counting sync with lock...");
+            stopList.Add(level);
         }
 
         /*
