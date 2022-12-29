@@ -19,6 +19,7 @@ namespace Program
 
         Task LevelPressed(int level, CallState callState);
 
+        Task someMethod();
 
     }
 

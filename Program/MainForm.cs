@@ -34,7 +34,7 @@ namespace Program
             elevator = new Elevator(1, 20);
             elevator.LevelChanged += LevelChanged_Handler;
             elevator.StateChanged += StateChanged_Handler;
-            elevator.DoorChanged += DoorChanged_Handler; 
+            elevator.DoorChanged += DoorChanged_Handler;
         }
 
         private async void CallUpButton_Click(object sender, EventArgs e)
@@ -49,24 +49,48 @@ namespace Program
         }
         private async void button1_Click(object sender, EventArgs e)
         {
-            int level = 5;
-            await elevator.LevelPressed(level, CallState.OUTSIDE);
+            int level = 10;
+            var task = Task.Run(() => {
+                elevator.LevelPressed(level, CallState.OUTSIDE);
+            });
         }
-        
-        private void button2_Click(object sender, EventArgs e)
+
+        private async void button2_Click(object sender, EventArgs e)
         {
 
+            try
+            {
+                int level = 1;
+                var task = Task.Run(() => {
+                    elevator.LevelPressed(level, CallState.OUTSIDE);
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                int level = 5;
+                var task = Task.Run(() => {
+                    elevator.LevelPressed(level, CallState.OUTSIDE);
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
+
         private void LevelChanged_Handler(object sender, int currentLevel)
         {
             Console.WriteLine($"Лифт на этаже: {currentLevel}");
             displayPictureBox.Image = System.Drawing.Image.FromFile(PATH_TO_RESOURCES_IMAGES + "\\number\\" + currentLevel + ".png");
-            Refresh();
+            //Refresh();
         }
 
         private void StateChanged_Handler(object sender, ElevatorState elevatorState)
@@ -77,29 +101,29 @@ namespace Program
                 case ElevatorState.WAIT:
                     if (elevator.DoorState == DoorState.CLOSE)
                     {
-                        OpenDoor();
+                        //OpenDoor();
                     }
                     if (elevator.DoorState == DoorState.OPEN)
                     {
-                        CloseDoor();
+                        //CloseDoor();
                     }
                     break;
                 case ElevatorState.UP:
                     if (elevator.DoorState == DoorState.OPEN)
                     {
-                        CloseDoor();
+                        //CloseDoor();
                     }
                     break;
                 case ElevatorState.DOWN:
                     if (elevator.DoorState == DoorState.OPEN)
                     {
-                        CloseDoor();
+                        //CloseDoor();
                     }
                     break;
                 default:
                     break;
             }
-            Refresh();
+            //Refresh();
         }
         private void DoorChanged_Handler(object sender, DoorState doorState)
         {
