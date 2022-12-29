@@ -16,7 +16,7 @@ namespace Program
 
         event EventHandler<DoorState> DoorChanged;
 
-        Task LevelPressed(int level);
+        Task LevelPressedAsync(int level);
 
     }
 

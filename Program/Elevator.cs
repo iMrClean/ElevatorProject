@@ -94,7 +94,7 @@ namespace Program
         /**
          * Пользователь нажал на кнопку этажа внутри лифта
          */
-        public async Task LevelPressed(int level)
+        public async Task LevelPressedAsync(int level)
         {
             try
             {
@@ -108,6 +108,9 @@ namespace Program
             }
         }
 
+        /**
+         * Рассчет пути лифта
+         */
         private async Task ElevatorRouterAsync(int level)
         {
             if (CurrentLevel < level)
@@ -126,6 +129,9 @@ namespace Program
             }
         }
 
+        /**
+         * Двигаться вверх
+         */
         private void MoveUp(int level)
         {
             lock (locker)
@@ -139,6 +145,9 @@ namespace Program
             }
         }
 
+        /**
+         * Двигаться вниз
+         */
         private void MoveDown(int level)
         {
             lock (locker)
@@ -152,6 +161,9 @@ namespace Program
             }
         }
 
+        /**
+         * Остановиться
+         */
         private void MoveStop(int level)
         {
             Console.WriteLine("[MoveStop] Остановились на {0} этаже {1}", level, ElevatorState);

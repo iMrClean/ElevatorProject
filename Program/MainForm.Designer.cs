@@ -33,6 +33,7 @@
             this.callPictureBox = new System.Windows.Forms.PictureBox();
             this.displayPictureBox = new System.Windows.Forms.PictureBox();
             this.elevatorPictureBox = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.callPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.displayPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elevatorPictureBox)).BeginInit();
@@ -93,12 +94,23 @@
             this.elevatorPictureBox.TabIndex = 0;
             this.elevatorPictureBox.TabStop = false;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(662, 185);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.callDownButton);
             this.Controls.Add(this.callUpButton);
             this.Controls.Add(this.callPictureBox);
@@ -121,6 +133,7 @@
         private System.Windows.Forms.PictureBox callPictureBox;
         private System.Windows.Forms.Button callUpButton;
         private System.Windows.Forms.Button callDownButton;
+        private System.Windows.Forms.Button button1;
     }
 }
 

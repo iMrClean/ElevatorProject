@@ -41,12 +41,18 @@ namespace Program
         private async void CallUpButton_Click(object sender, EventArgs e)
         {
             int level = 10;
-            await elevator.LevelPressed(level);
+            await elevator.LevelPressedAsync(level);
         }
         private async void CallDownButton_Click(object sender, EventArgs e)
         {
             int level = 1;
-            await elevator.LevelPressed(level);
+            await elevator.LevelPressedAsync(level);
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            int level = 5;
+            await elevator.LevelPressedAsync(level);
         }
 
         private void LevelChanged_Handler(object sender, int currentLevel)
@@ -63,6 +69,5 @@ namespace Program
         {
             Console.WriteLine($"[DoorChanged] Двери лифта : {doorState}");
         }
-
     }
 }
