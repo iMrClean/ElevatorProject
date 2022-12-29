@@ -13,8 +13,11 @@ namespace Program
 {
     internal class Elevator : IElevator
     {
-
+        /**
+         * Локер
+         */
         private static readonly object locker = new object();
+
         /**
          * Время за которое лифт перемещается на этаж
          */
@@ -55,7 +58,9 @@ namespace Program
          *Событие которое следит за изменением открытости
          */
         public event EventHandler<DoorState> DoorChanged;
-
+        /**
+         * Список остановок
+         */
         public List<int> stopList;
 
         /**
@@ -111,19 +116,14 @@ namespace Program
             }
 
             if (CurrentLevel > level)
-
+            {
                 await Task.Run(() => MoveDown(level));
-
+            }
 
             if (CurrentLevel == level)
             {
                 await Task.Run(() => MoveStop(level));
             }
-        }
-
-        private void MoveStop(int level)
-        {
-            Console.WriteLine("[MoveStop] Остановились на {0} этаже {1}", level, ElevatorState);
         }
 
         private void MoveUp(int level)
@@ -151,5 +151,11 @@ namespace Program
                 }
             }
         }
+
+        private void MoveStop(int level)
+        {
+            Console.WriteLine("[MoveStop] Остановились на {0} этаже {1}", level, ElevatorState);
+        }
+
     }
 }
