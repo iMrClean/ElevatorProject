@@ -4,20 +4,40 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Program
 {
+    public readonly struct Fraction
+    {
+        private readonly int f1;
+
+        private readonly int f2;
+
+        public Fraction(int f1, int f2)
+        {
+            this.f1 = f1;
+            this.f2 = f2;
+        }
+
+        public static Fraction operator <=(Fraction f1, Fraction f2) => new Fraction(f1.f1, f2.f2);
+
+        public static Fraction operator >=(Fraction f1, Fraction f2) => new Fraction(f1.f1, f2.f2);
+
+    }
 
     internal class Elevator : IElevator
     {
 
+        private static readonly object locker = new object();
         /**
          * Время за которое лифт перемещается на этаж
          */
         private static readonly int FUCKING_SLEEP = 750;
+
         /**
          * Минимальный этаж
          */
@@ -26,6 +46,7 @@ namespace Program
          * Максимальный этаж
          */
         private readonly int MaxLevel;
+
         /**
          * Текущий этаж
          */
@@ -38,6 +59,8 @@ namespace Program
          * Текущеее состояние дверей
          */
         public DoorState DoorState { get; set; }
+
+
         /**
          * Событие которое следит за изменением этажа
          */
@@ -50,19 +73,17 @@ namespace Program
          *Событие которое следит за изменением открытости
          */
         public event EventHandler<DoorState> DoorChanged;
-        /**
-         * Этажи на которых нужно остановиться
-         */
-        public List<int> stopList { get; set; }
+
+        public List<int> stopList;
 
         /**
          * Конструктор
          */
         public Elevator(int minLevel, int maxLevel)
         {
-            this.CurrentLevel = 1;
             this.MinLevel = minLevel;
             this.MaxLevel = maxLevel;
+            this.CurrentLevel = 1;
             this.ElevatorState = ElevatorState.WAIT;
             this.DoorState = DoorState.CLOSE;
             this.stopList = new List<int>();
@@ -84,94 +105,15 @@ namespace Program
         }
 
         /**
-         * Двигаться вверх
-         */
-        private void MoveUp(int level)
-        {
-            Console.WriteLine("MoveUp Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
-            UpdateElevatorState(ElevatorState.UP);
-            UpdateDoorState(DoorState.CLOSE);
-
-            while (level <= MaxLevel)
-            {
-
-                if (stopList.Contains(CurrentLevel))
-                {
-                    MoveStop(level);
-                }
-                if (stopList.Count == 0)
-                {
-                    break;
-                }
-                UpdateLevelState(++CurrentLevel);
-
-                Thread.Sleep(FUCKING_SLEEP);
-            }
-        }
-        
-        /**
-        * Двигаться вниз
-        */
-        private void MoveDown(int level)
-        {
-            Console.WriteLine("MoveDown Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
-            UpdateElevatorState(ElevatorState.DOWN);
-            UpdateDoorState(DoorState.CLOSE);
-
-            while (level >= MinLevel)
-            {
-
-                if (stopList.Contains(CurrentLevel))
-                {
-                    MoveStop(level);
-                }
-                if (stopList.Count == 0)
-                {
-                    break;
-                }
-                UpdateLevelState(--CurrentLevel);
-
-                Thread.Sleep(FUCKING_SLEEP);
-            }
-        }
-
-        /**
-        * Остановили движение (добрались до нужного этажа)
-        */
-        private void MoveStop(int level)
-        {
-            Console.WriteLine("MoveStop Остановились на {0} этаже {1}", level, ElevatorState);
-            Update(ElevatorState.WAIT, DoorState.OPEN, level);
-
-            stopList.Remove(level);
-            Thread.Sleep(FUCKING_SLEEP);
-        }
-
-        /**
          * Пользователь нажал на кнопку этажа внутри лифта
          */
-        public async Task LevelPressed(int level, CallState callState)
+        public async Task LevelPressed(int level)
         {
             try
             {
-                Console.WriteLine("Метод LevelPressed Выбран {0} этаж, вызов {1}", level, callState);
+                Console.WriteLine("[LevelPressed] Выбран {0} этаж.", level);
                 CheckLevel(level);
-                await AddToStopList(level);
-                if (ElevatorState == ElevatorState.WAIT)
-                {
-                    if (CurrentLevel == level)
-                    {
-                        MoveStop(level);
-                    }
-                    else if (CurrentLevel < level)
-                    {
-                        MoveUp(level);
-                    }
-                    else if (CurrentLevel > level)
-                    {
-                        MoveDown(level);
-                    }
-                }
+                ElevatorRouter(level);
             }
             catch (Exception ex)
             {
@@ -179,53 +121,63 @@ namespace Program
             }
         }
 
-
-        private async Task AddToStopList(int level)
+        private void ElevatorRouter(int level)
         {
-            stopList.ForEach(i => {
-                Console.WriteLine("Текущее состояние лифта " + ElevatorState.ToString());
-                Console.WriteLine("THIS IS SPAAAAARTAAAAAAAAAAAAA item " + i);
-            });
-            stopList.Add(level);
-            await Task.Delay(FUCKING_SLEEP);
+            if (CurrentLevel < level)
+            {
+                MoveUp(level);
+            }
+
+            if (CurrentLevel > level)
+            {
+                MoveDown(level);
+            }
+
+            if (CurrentLevel == level)
+            {
+                MoveStop(level);
+            }
         }
 
-        /*
-         * Обновить все евенты
-         */
-        private void Update(ElevatorState elevatorState, DoorState doorState, int level)
+        private void MoveStop(int level)
         {
-            UpdateElevatorState(elevatorState);
-            UpdateDoorState(doorState);
-            UpdateLevelState(level);
+            Console.WriteLine("[MoveStop] Остановились на {0} этаже {1}", level, ElevatorState);
         }
 
-        /*
-         * Обновить евент лифта
-         */
-        private void UpdateElevatorState(ElevatorState elevatorState)
+        private void MoveUp(int level)
         {
-            ElevatorState = elevatorState;
-            StateChanged?.Invoke(this, ElevatorState);
+            while (CurrentLevel < level)
+            {
+                Console.WriteLine("[MoveUp] Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
+                CurrentLevel++;
+            }
         }
 
-        /*
-         * Обновить евент двери
-         */
-        private void UpdateDoorState(DoorState doorState)
+        private void MoveDown(int level)
         {
-            DoorState = doorState;
-            DoorChanged?.Invoke(this, DoorState);
-        }
-        /*
-         * Обновить евент этажа
-         */
-        private void UpdateLevelState(int level)
-        {
-            CurrentLevel = level;
-            LevelChanged?.Invoke(this, CurrentLevel);
+            while (CurrentLevel > level)
+            {
+                Console.WriteLine("[MoveDown] Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
+                CurrentLevel--;
+            }
         }
 
+        public void test()
+        {
+            switch (ElevatorState)
+            {
+                case ElevatorState.WAIT:
+                    Console.WriteLine("case 1");
+                    break;
+                case ElevatorState.UP:
+                    Console.WriteLine("case 2");
+                    break;
+                case ElevatorState.DOWN:
+                    Console.WriteLine("case 3");
+                    break;
+                default:
+                    throw new Exception("Лифт сломался");
+            }
+        }
     }
-
 }

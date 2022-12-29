@@ -9,7 +9,6 @@ namespace Program
 {
     internal interface IElevator
     {
-        DoorState DoorState { get; }
 
         event EventHandler<int> LevelChanged;
 
@@ -17,7 +16,7 @@ namespace Program
 
         event EventHandler<DoorState> DoorChanged;
 
-        Task LevelPressed(int level, CallState callState);
+        Task LevelPressed(int level);
 
     }
 

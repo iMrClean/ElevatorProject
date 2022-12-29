@@ -66,6 +66,7 @@
     <Compile Include="Enum\ElevatorState.cs" />
     <Compile Include="Enum\DoorState.cs" />
     <Compile Include="IElevator.cs" />
+    <Compile Include="LevelCounter.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
