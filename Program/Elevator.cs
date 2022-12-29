@@ -180,11 +180,6 @@ namespace Program
             }
         }
 
-        public async Task someMethod()
-        {
-            await Task.Delay(2000);
-        }
-
         private async Task AddToStopList(int level)
         {
             stopList.ForEach(i => {
