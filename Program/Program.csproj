@@ -62,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Elevator.cs" />
-    <Compile Include="Enum\CallState.cs" />
     <Compile Include="Enum\ElevatorState.cs" />
     <Compile Include="Enum\DoorState.cs" />
     <Compile Include="IElevator.cs" />
