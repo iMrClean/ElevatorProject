@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Program
 {
-    internal class Elevator : IElevator
+    internal class Elevator
     {
         /**
          * Локер

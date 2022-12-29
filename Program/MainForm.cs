@@ -21,7 +21,7 @@ namespace Program
 
         private static readonly int FUCKING_SLEEP = 300;
 
-        private IElevator elevator;
+        private Elevator elevator;
 
         public MainForm()
         {
