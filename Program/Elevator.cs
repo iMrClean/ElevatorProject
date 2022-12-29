@@ -11,24 +11,6 @@ using System.Windows.Forms;
 
 namespace Program
 {
-    public readonly struct Fraction
-    {
-        private readonly int f1;
-
-        private readonly int f2;
-
-        public Fraction(int f1, int f2)
-        {
-            this.f1 = f1;
-            this.f2 = f2;
-        }
-
-        public static Fraction operator <=(Fraction f1, Fraction f2) => new Fraction(f1.f1, f2.f2);
-
-        public static Fraction operator >=(Fraction f1, Fraction f2) => new Fraction(f1.f1, f2.f2);
-
-    }
-
     internal class Elevator : IElevator
     {
 
