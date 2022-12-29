@@ -95,7 +95,7 @@ namespace Program
             {
                 Console.WriteLine("[LevelPressed] Выбран {0} этаж.", level);
                 CheckLevel(level);
-                ElevatorRouter(level);
+                await ElevatorRouterAsync(level);
             }
             catch (Exception ex)
             {
@@ -103,21 +103,21 @@ namespace Program
             }
         }
 
-        private void ElevatorRouter(int level)
+        private async Task ElevatorRouterAsync(int level)
         {
             if (CurrentLevel < level)
             {
-                MoveUp(level);
+                await Task.Run(() => MoveUp(level));
             }
 
             if (CurrentLevel > level)
-            {
-                MoveDown(level);
-            }
+
+                await Task.Run(() => MoveDown(level));
+
 
             if (CurrentLevel == level)
             {
-                MoveStop(level);
+                await Task.Run(() => MoveStop(level));
             }
         }
 
@@ -128,37 +128,27 @@ namespace Program
 
         private void MoveUp(int level)
         {
-            while (CurrentLevel < level)
+            lock (locker)
             {
-                Console.WriteLine("[MoveUp] Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
-                CurrentLevel++;
+                while (CurrentLevel < level)
+                {
+                    Console.WriteLine("[MoveUp] Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
+                    CurrentLevel++;
+                    Thread.Sleep(FUCKING_SLEEP);
+                }
             }
         }
 
         private void MoveDown(int level)
         {
-            while (CurrentLevel > level)
+            lock (locker)
             {
-                Console.WriteLine("[MoveDown] Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
-                CurrentLevel--;
-            }
-        }
-
-        public void test()
-        {
-            switch (ElevatorState)
-            {
-                case ElevatorState.WAIT:
-                    Console.WriteLine("case 1");
-                    break;
-                case ElevatorState.UP:
-                    Console.WriteLine("case 2");
-                    break;
-                case ElevatorState.DOWN:
-                    Console.WriteLine("case 3");
-                    break;
-                default:
-                    throw new Exception("Лифт сломался");
+                while (CurrentLevel > level)
+                {
+                    Console.WriteLine("[MoveDown] Текущий этаж {0}, едем на {1}, статус {2}", CurrentLevel, level, ElevatorState);
+                    CurrentLevel--;
+                    Thread.Sleep(FUCKING_SLEEP);
+                }
             }
         }
     }
