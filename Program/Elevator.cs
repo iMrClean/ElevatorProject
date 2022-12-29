@@ -18,7 +18,6 @@ namespace Program
          * Время за которое лифт перемещается на этаж
          */
         private static readonly int FUCKING_SLEEP = 750;
-
         /**
          * Минимальный этаж
          */
@@ -179,6 +178,7 @@ namespace Program
                 Console.WriteLine(ex.Message);
             }
         }
+
 
         private async Task AddToStopList(int level)
         {
